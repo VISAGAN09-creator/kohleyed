@@ -239,6 +239,17 @@ export async function fetchInventory(signal?: AbortSignal): Promise<InventoryPro
   return result.products;
 }
 
+export async function deleteInventoryProduct(product: InventoryProduct): Promise<void> {
+  const { body } = await adminFetch('/admin/products', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ collectionName: product.collectionName, documentId: product.documentId }),
+  });
+  if (!(body as { success?: boolean } | null)?.success) {
+    throw new Error((body as { message?: string } | null)?.message || 'Unable to delete the product.');
+  }
+}
+
 export async function saveInventory(
   updates: Array<{
     productId: string;
@@ -281,6 +292,17 @@ export async function fetchProductCollections(signal?: AbortSignal): Promise<str
   const result = body as ProductCollectionsResponse | null;
   if (!result?.success || !Array.isArray(result.collections)) throw new Error(result?.message || 'Unable to load product collections.');
   return result.collections;
+}
+
+export async function createProductCollection(name: string): Promise<string> {
+  const { body } = await adminFetch('/admin/product-collections', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  const result = body as { success?: boolean; name?: string; message?: string } | null;
+  if (!result?.success || !result.name) throw new Error(result?.message || 'Unable to create the collection.');
+  return result.name;
 }
 
 export async function createProduct(payload: NewProductPayload): Promise<string> {

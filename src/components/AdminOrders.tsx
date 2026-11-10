@@ -85,7 +85,7 @@ function orderItemsForCsv(order: AdminOrder) {
 
 function downloadOrdersCsv(orders: AdminOrder[]) {
   const rows = [
-    ['Order ID', 'Order Type', 'Order Date', 'Customer Name', 'Customer Email', 'Phone Number', 'Shipping Address', 'Products / Items', 'Order Total (INR)', 'Payment Method', 'Payment Status', 'Fulfillment Status', 'Gateway Order ID'],
+    ['Order ID', 'Order Type', 'Order Date', 'Customer Name', 'Customer Email', 'Phone Number', 'Shipping Address', 'Country', 'State', 'City', 'Pincode', 'Products / Items', 'Order Total (INR)', 'Payment Method', 'Payment Status', 'Fulfillment Status', 'Gateway Order ID'],
     ...orders.map((order) => [
       order.orderId,
       order.orderType === 'walk-in' ? 'Walk-in' : 'Online',
@@ -94,6 +94,10 @@ function downloadOrdersCsv(orders: AdminOrder[]) {
       order.customer.email || '',
       order.customer.phone || '',
       orderAddress(order),
+      order.shipping.country || '',
+      order.shipping.state || '',
+      order.shipping.city || '',
+      order.shipping.pinCode || '',
       orderItemsForCsv(order),
       order.pricing.total ?? '',
       order.payment.method === 'other' ? order.payment.otherMethod || 'Other' : order.payment.method || order.payment.gateway || '',
