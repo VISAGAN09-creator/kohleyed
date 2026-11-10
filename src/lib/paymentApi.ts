@@ -1,8 +1,8 @@
-const CUSTOM_DOMAIN_STORE_PATH = '/varataaa';
+const CUSTOM_DOMAIN_STORE_PATH = '/kohleyed';
 
 /**
  * Firebase Hosting serves the store at the domain root, while the Handle
- * Vercel proxy mounts it under /varataaa. Keep payment API requests within
+ * Vercel proxy mounts it under /kohleyed. Keep payment API requests within
  * that mount only when the customer is using the custom-domain storefront.
  */
 export function paymentApiPath(endpoint: string): string {

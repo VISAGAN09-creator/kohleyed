@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { ArrowLeft, Mail } from 'lucide-react';
+import { mainWebsiteSectionPath, type PolicyPageSlug } from '../utils/sitePaths';
 
-export type PolicySlug = 'terms-and-conditions' | 'privacy-policy' | 'refund-policy' | 'shipping-policy';
+export type PolicySlug = PolicyPageSlug;
 
 type PolicySectionProps = {
   title: string;
@@ -28,13 +29,13 @@ const policyTitles: Record<PolicySlug, string> = {
   'shipping-policy': 'Shipping and Delivery Policy',
 };
 
-const supportEmails = 'varataaah@gmail.com or handle2227@gmail.com';
+const supportEmails = import.meta.env.VITE_CONTACT_EMAIL || 'the contact address published by Kohleyed';
 
 function TermsPolicy() {
   return (
     <>
       <PolicySection title="1. About these terms">
-        <p>These Terms and Conditions govern your use of the VARATAAA website and your purchase of products through it. “VARATAAA”, “we”, “us” and “our” refer to the brand operating this storefront. The registered legal entity and registered address are not identified in the current website implementation and must be confirmed before publication as a legal notice.</p>
+        <p>These Terms and Conditions govern your use of the Kohleyed website and your purchase of products through it. “Kohleyed”, “we”, “us” and “our” refer to the brand operating this storefront. The registered legal entity and registered address are not identified in the current website implementation and must be confirmed before publication as a legal notice.</p>
       </PolicySection>
       <PolicySection title="2. Website use and eligibility">
         <p>You may use the website for lawful personal shopping and related enquiries. By placing an order, you confirm that the information you provide is accurate and that you are legally capable of entering into a purchase under applicable Indian law. Do not misuse the website, interfere with its operation, attempt unauthorised access, or use it for fraudulent or unlawful activity.</p>
@@ -49,20 +50,20 @@ function TermsPolicy() {
         <p>Submitting checkout details starts the order process; it does not by itself guarantee acceptance. An order is accepted only after the payment gateway confirms payment and the order is successfully recorded by the server. We may decline or cancel an order where the product is unavailable, the submitted information cannot be validated, a technical or pricing error occurred, or fraud or misuse is reasonably suspected. Any resulting refund is subject to the Refund and Cancellation Policy and applicable law.</p>
       </PolicySection>
       <PolicySection title="6. Payment processing">
-        <p>Online payments are processed through Razorpay Checkout. VARATAAA does not receive or store your full card, UPI or other payment credentials in the storefront code. The server verifies the payment with Razorpay before recording a paid order. Payment may be unsuccessful, pending or reversed according to the gateway’s processes.</p>
+        <p>Online payments are processed through Razorpay Checkout. Kohleyed does not receive or store your full card, UPI or other payment credentials in the storefront code. The server verifies the payment with Razorpay before recording a paid order. Payment may be unsuccessful, pending or reversed according to the gateway’s processes.</p>
       </PolicySection>
       <PolicySection title="7. Shipping, cancellation, returns and refunds">
         <p>Shipping charges, dispatch estimates and India-only delivery availability are described in the Shipping and Delivery Policy. Cancellation, returns, exchanges and refunds are described in the Refund and Cancellation Policy. Because the current implementation does not define a universal return window, refund timeline or cancellation guarantee, those matters must be confirmed as business policy before publication.</p>
       </PolicySection>
       <PolicySection title="8. Intellectual property">
-        <p>The VARATAAA name, branding, graphics, text, product imagery, layouts and other website content are owned by or used by VARATAAA and may be protected by intellectual-property laws. You may view the website for personal use, but you must not copy, reproduce, distribute, modify or commercially exploit its content without permission.</p>
+        <p>The Kohleyed name, branding, graphics, text, product imagery, layouts and other website content are owned by or used by Kohleyed and may be protected by intellectual-property laws. You may view the website for personal use, but you must not copy, reproduce, distribute, modify or commercially exploit its content without permission.</p>
       </PolicySection>
       <PolicySection title="9. Liability and service availability">
-        <p>To the extent permitted by law, VARATAAA is not responsible for interruptions, delayed communications, gateway outages, network failures, inaccurate customer information, or events outside our reasonable control. Nothing in these terms excludes or limits a consumer right or liability that cannot lawfully be excluded under applicable Indian law.</p>
+        <p>To the extent permitted by law, Kohleyed is not responsible for interruptions, delayed communications, gateway outages, network failures, inaccurate customer information, or events outside our reasonable control. Nothing in these terms excludes or limits a consumer right or liability that cannot lawfully be excluded under applicable Indian law.</p>
       </PolicySection>
       <PolicySection title="10. Changes and contact">
-        <p>We may update these terms when the website, products, payment flow or legal requirements change. The updated version will show a new Last Updated date. Questions, complaints and order support can be sent to {supportEmails} or by phone at +91 7358012011.</p>
-        <p>Disputes should first be raised with VARATAAA so that we can try to resolve them. Any formal dispute process, jurisdiction and registered business details require confirmation and legal review; nothing on this page is a legal certification.</p>
+        <p>We may update these terms when the website, products, payment flow or legal requirements change. The updated version will show a new Last Updated date. Questions, complaints and order support can be sent to {supportEmails}.</p>
+        <p>Disputes should first be raised with Kohleyed so that we can try to resolve them. Any formal dispute process, jurisdiction and registered business details require confirmation and legal review; nothing on this page is a legal certification.</p>
       </PolicySection>
     </>
   );
@@ -72,7 +73,7 @@ function PrivacyPolicy() {
   return (
     <>
       <PolicySection title="1. Scope and data controller details">
-        <p>This Privacy Policy explains how the VARATAAA storefront handles information in the website and checkout flow. The current code does not state VARATAAA’s registered legal name or registered address, so those details require confirmation before publication of a final legal notice.</p>
+        <p>This Privacy Policy explains how the Kohleyed storefront handles information in the website and checkout flow. The current code does not state Kohleyed’s registered legal name or registered address, so those details require confirmation before publication of a final legal notice.</p>
       </PolicySection>
       <PolicySection title="2. Information collected">
         <p>When you check out, the website asks for your name, email address, 10-digit phone number and Indian delivery details: country, door number, address lines, city, state and PIN code. The server validates and stores customer and shipping details with the order record after payment is verified.</p>
@@ -122,26 +123,26 @@ function RefundPolicy() {
         <strong>Business confirmation required:</strong> the current website has no implemented cancellation, returns, exchange or refund workflow and does not define a return window or refund timeline. The provisions below describe the request process without promising an unconfirmed period or outcome. Confirm them with the business and obtain legal review before relying on this page as a final policy.
       </div>
       <PolicySection title="1. Requesting cancellation">
-        <p>If you need to cancel an order, contact {supportEmails} as soon as possible with your order ID and the email or phone number used at checkout. A cancellation request is not automatically accepted. VARATAAA will check whether the order has been accepted, prepared, dispatched or otherwise processed.</p>
+        <p>If you need to cancel an order, contact {supportEmails} as soon as possible with your order ID and the email or phone number used at checkout. A cancellation request is not automatically accepted. Kohleyed will check whether the order has been accepted, prepared, dispatched or otherwise processed.</p>
         <p>The current implementation does not expose a self-service cancellation button or guarantee cancellation before a particular time. Once an order has entered processing, printing, packing or dispatch, cancellation may not be possible.</p>
       </PolicySection>
       <PolicySection title="2. Damaged, defective or incorrect products">
         <p>Contact support promptly after delivery if the product is damaged, defective, materially different from the order, or the wrong product was received. Include the order ID, a description of the issue and clear photographs of the parcel and product. Keep the product and packaging available while the request is reviewed.</p>
-        <p>VARATAAA will assess the request and may ask for further information or return of the product. Any replacement, exchange or refund will be decided in accordance with applicable consumer law and the confirmed business process.</p>
+        <p>Kohleyed will assess the request and may ask for further information or return of the product. Any replacement, exchange or refund will be decided in accordance with applicable consumer law and the confirmed business process.</p>
       </PolicySection>
       <PolicySection title="3. Returns and exchanges">
         <p>Return and exchange eligibility is not fully defined in the current implementation. In particular, the code does not specify a number of days, whether size exchanges are accepted, who pays return shipping, or how customised products are treated. Do not send a product back without instructions from support.</p>
-        <p>Custom or personalised products may require separate treatment because they are created for a customer, but VARATAAA must confirm the applicable rule and ensure it is consistent with law before publishing it.</p>
+        <p>Custom or personalised products may require separate treatment because they are created for a customer, but Kohleyed must confirm the applicable rule and ensure it is consistent with law before publishing it.</p>
       </PolicySection>
       <PolicySection title="4. Review and refund process">
         <p>After receiving a request, support will verify the order, payment and issue. If a refund is approved, it will normally be initiated using the original payment method or another lawful method agreed with the customer. The exact approval and processing timelines are not specified by the current code and must be confirmed before publication; no fixed refund-period promise is made here.</p>
-        <p>Razorpay and the customer’s bank or payment provider may apply their own processing time after VARATAAA initiates a refund. Keep the order ID and payment confirmation until the matter is resolved.</p>
+        <p>Razorpay and the customer’s bank or payment provider may apply their own processing time after Kohleyed initiates a refund. Keep the order ID and payment confirmation until the matter is resolved.</p>
       </PolicySection>
       <PolicySection title="5. Non-refundable situations">
         <p>Subject to applicable law, a request may be declined where there is no verified defect, damage or fulfilment error; the product has been used, washed, altered or damaged after delivery; required evidence is not provided; the issue is caused by incorrect customer information; or the request relates to a business rule that has not been confirmed. No exclusion in this policy removes rights that cannot lawfully be excluded.</p>
       </PolicySection>
       <PolicySection title="6. Contact and pending decisions">
-        <p>Send cancellation, return, exchange and refund requests to {supportEmails} or call +91 7358012011. The business must confirm: the cancellation cut-off, return window, exchange rules, custom-product treatment, condition requirements, return-shipping responsibility, approval criteria, refund timeline, refund method and any authorised return address. These are intentionally not invented here.</p>
+        <p>Send cancellation, return, exchange and refund requests to {supportEmails}. The business must confirm: the cancellation cut-off, return window, exchange rules, custom-product treatment, condition requirements, return-shipping responsibility, approval criteria, refund timeline, refund method and any authorised return address. These are intentionally not invented here.</p>
       </PolicySection>
     </>
   );
@@ -159,7 +160,7 @@ function ShippingPolicy() {
   return (
     <>
       <PolicySection title="1. Availability">
-        <p>VARATAAA currently supports delivery within India only. The checkout accepts Indian states and Union Territories and validates the PIN code against the selected state. International delivery is not currently supported by the implementation.</p>
+        <p>Kohleyed currently supports delivery within India only. The checkout accepts Indian states and Union Territories and validates the PIN code against the selected state. International delivery is not currently supported by the implementation.</p>
       </PolicySection>
       <PolicySection title="2. Shipping charges">
         <p>Shipping is calculated from the number of T-shirts in the order. The applicable rate is charged for each group of up to three T-shirts:</p>
@@ -176,16 +177,16 @@ function ShippingPolicy() {
         <p>The current order-confirmation email and site content state an estimate of 7 days to dispatch. This is a dispatch estimate, not a guaranteed delivery date. Processing may depend on product availability, customisation, payment verification and operational conditions.</p>
       </PolicySection>
       <PolicySection title="4. Delivery estimates and tracking">
-        <p>The repository does not contain a carrier integration or customer-facing tracking page. The current implementation therefore does not promise a tracking link or a fixed delivery timeline after dispatch. If tracking becomes available for an order, VARATAAA may share it by email or through the support channel.</p>
+        <p>The repository does not contain a carrier integration or customer-facing tracking page. The current implementation therefore does not promise a tracking link or a fixed delivery timeline after dispatch. If tracking becomes available for an order, Kohleyed may share it by email or through the support channel.</p>
       </PolicySection>
       <PolicySection title="5. Address accuracy and failed delivery">
-        <p>Provide a complete, accurate address, phone number, city, state and PIN code. VARATAAA is not responsible for avoidable delay or failed delivery caused by an incorrect or incomplete address, unavailable recipient, refusal, or inability to contact the recipient. Contact support promptly if an address needs correction; changes may not be possible after processing or dispatch.</p>
+        <p>Provide a complete, accurate address, phone number, city, state and PIN code. Kohleyed is not responsible for avoidable delay or failed delivery caused by an incorrect or incomplete address, unavailable recipient, refusal, or inability to contact the recipient. Contact support promptly if an address needs correction; changes may not be possible after processing or dispatch.</p>
       </PolicySection>
       <PolicySection title="6. Delays and damaged shipments">
         <p>Delivery may be delayed by carrier conditions, weather, public events, service disruption, remote-area constraints, incorrect details, payment or inventory issues, or events outside reasonable control. Report visible parcel damage or a missing/incorrect product to {supportEmails} with the order ID and photographs so the issue can be investigated.</p>
       </PolicySection>
       <PolicySection title="7. Support">
-        <p>For shipping questions, contact {supportEmails} or +91 7358012011. The current code does not identify one email as the exclusive shipping-support address, so both published VARATAAA emails are provided until the business confirms a preferred inbox.</p>
+        <p>For shipping questions, contact {supportEmails}. Confirm the support address before publishing this policy.</p>
       </PolicySection>
     </>
   );
@@ -203,18 +204,18 @@ export function PolicyPage({ slug }: { slug: PolicySlug }) {
   return (
     <article className="relative z-[1] bg-white px-5 pb-20 pt-28 sm:px-8 sm:pb-28 sm:pt-36 lg:px-12">
       <div className="mx-auto w-full max-w-4xl">
-        <a href="/varataaa/#hero" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-metal-dark transition hover:text-black">
-          <ArrowLeft size={15} aria-hidden="true" /> Back to VARATAAA
+        <a href={mainWebsiteSectionPath('#hero')} className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-metal-dark transition hover:text-black">
+          <ArrowLeft size={15} aria-hidden="true" /> Back to Kohleyed
         </a>
         <header className="mt-10 border-b border-metal-light pb-9">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-metal-text">VARATAAA / Legal</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-metal-text">Kohleyed / Legal</p>
           <h1 className="mt-4 max-w-3xl font-display text-4xl font-black tracking-tight text-metal-black sm:text-6xl">{policyTitles[slug]}</h1>
           <p className="mt-5 text-sm leading-6 text-metal-dark">Last Updated: 2 November 2026</p>
         </header>
         <div className="mt-9 space-y-9">{content}</div>
         <div className="mt-12 flex flex-wrap items-center gap-3 border-t border-metal-light pt-7 text-sm text-metal-dark">
           <Mail size={16} aria-hidden="true" />
-          Questions? <a className="font-semibold underline underline-offset-4" href="mailto:varataaah@gmail.com">varataaah@gmail.com</a> or <a className="font-semibold underline underline-offset-4" href="mailto:handle2227@gmail.com">handle2227@gmail.com</a>
+          {import.meta.env.VITE_CONTACT_EMAIL && <>Questions? <a className="font-semibold underline underline-offset-4" href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL}`}>{import.meta.env.VITE_CONTACT_EMAIL}</a></>}
         </div>
       </div>
     </article>

@@ -107,7 +107,7 @@ function downloadOrdersCsv(orders: AdminOrder[]) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = `varataaa-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+  anchor.download = `kohleyed-orders-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.append(anchor);
   anchor.click();
   anchor.remove();
@@ -241,7 +241,7 @@ export function AdminOrders({ adminEmail, onSignOut, onExit, onOpenInventory }: 
         <header className="mb-7 flex flex-col gap-5 border-b border-white/10 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">
-              <ShieldCheck size={15} aria-hidden="true" /> VARATAAA administration
+              <ShieldCheck size={15} aria-hidden="true" /> Kohleyed administration
             </div>
             <h1 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Orders</h1>
             <p className="mt-2 text-sm text-zinc-400">Manage fulfillment without changing verified payment records.</p>

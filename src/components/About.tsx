@@ -27,7 +27,7 @@ export function About() {
           <div className="absolute left-1/2 top-1/2 h-[350px] w-[260px] -translate-x-1/2 -translate-y-1/2 overflow-hidden sm:h-[400px] sm:w-[300px]">
             <SmartImage
               src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&h=800&fit=crop"
-              alt="About Varataaa"
+              alt="About Kohleyed"
               className="h-full w-full object-cover"
             />
           </div>
@@ -42,19 +42,15 @@ export function About() {
           </h2>
           <div className="space-y-6 text-base font-light leading-8 text-white/80 sm:text-lg">
             <p>
-              Varataaa was born from a desire to break free from conventional fashion. We believe
-              clothing should be an extension of your boldest self — a canvas for expression that
-              transcends the ordinary.
+              Kohleyed brings expressive clothing and custom prints together in one storefront.
             </p>
             <p>
-              Every piece in our collection is designed with unconventional geometries and liquid
-              metal aesthetics. Our custom print technology allows us to create textures and patterns
-              that shift and shimmer like molten silver, giving each garment a unique, living quality.
+              Explore the latest collection and choose the size, color and design that suits you.
             </p>
-            <p>We don't follow trends. We forge them. Each design is a statement, each shape a rebellion against the mundane.</p>
+            <p>New products will appear here as the Kohleyed catalog is added.</p>
           </div>
 
-          <div className="mt-10 grid gap-5 border-t border-metal-dark pt-10 sm:mt-12 sm:grid-cols-3 sm:gap-7 sm:pt-12">
+          {stats.length > 0 && <div className="mt-10 grid gap-5 border-t border-metal-dark pt-10 sm:mt-12 sm:grid-cols-3 sm:gap-7 sm:pt-12">
             {stats.map((stat) => (
               <div key={stat.label}>
                 <div className="mb-2 font-display text-4xl font-bold text-white sm:text-[2.5rem]">
@@ -63,7 +59,7 @@ export function About() {
                 <div className="text-xs uppercase tracking-[0.05em] text-metal-text">{stat.label}</div>
               </div>
             ))}
-          </div>
+          </div>}
         </Reveal>
       </div>
     </section>

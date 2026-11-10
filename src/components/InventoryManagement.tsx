@@ -348,7 +348,7 @@ export function InventoryManagement({ adminEmail, onSignOut, onExit, onOpenOrder
       <section className="mx-auto w-full max-w-[1900px]">
         <header className="mb-7 flex flex-col gap-5 border-b border-white/10 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500"><ShieldCheck size={15} aria-hidden="true" /> VARATAAA administration</div>
+            <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500"><ShieldCheck size={15} aria-hidden="true" /> Kohleyed administration</div>
             <h1 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Inventory</h1>
             <p className="mt-2 text-sm text-zinc-400">Edit product details and stock together. Every save checks the latest product version.</p>
           </div>

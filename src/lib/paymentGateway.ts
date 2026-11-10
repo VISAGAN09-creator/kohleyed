@@ -58,7 +58,7 @@ export function openCheckout(context: CheckoutContext, callbacks: CheckoutCallba
     return;
   }
   const checkout = new window.Razorpay({
-    key: keyId, amount, currency: context.orderData.currency, name: 'VARATAAA',
+    key: keyId, amount, currency: context.orderData.currency, name: 'Kohleyed',
     description: `Order for ${context.itemCount} item(s)`, order_id: razorpayOrderId,
     prefill: { name: context.name, email: context.email, contact: context.phone },
     handler: callbacks.onSuccess,

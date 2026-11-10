@@ -3,6 +3,10 @@ const { getFirestore } = require("firebase-admin/firestore");
 const fs = require("fs");
 
 // 1. Initialize Firebase Admin
+// This legacy utility contains the copied source-store catalog and service
+// account. It must never import that data into Kohleyed or write to the source.
+throw new Error('Legacy catalog import is disabled for Kohleyed. Use the Kohleyed admin portal.');
+
 const serviceAccount = require("./serviceAccountKey.json");
 
 initializeApp({

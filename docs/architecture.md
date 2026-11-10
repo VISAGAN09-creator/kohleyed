@@ -1,5 +1,7 @@
 # Architecture Overview (Verified)
 
+> Kohleyed migration note: this document contains historical source-store details. Current setup and deployment are in [kohleyed-migration.md](kohleyed-migration.md). Active Firebase project: `kohleyed-a8060`.
+
 Evidence basis: source and Git-tracked config inspected on branch `feature/admin-auth` (HEAD `ea29abf`, 2026-10-20). Items not confirmed from this repository are marked **UNVERIFIED**.
 
 No secret values are documented here—only variable **names**.

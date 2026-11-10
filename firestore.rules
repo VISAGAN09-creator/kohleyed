@@ -12,7 +12,8 @@ service cloud.firestore {
         && collectionName != 'newsletter'
         && collectionName != 'orders_production'
         && collectionName != 'orders_out_for_delivery'
-        && collectionName != 'orders_delivered';
+        && collectionName != 'orders_delivered'
+        && collectionName != 'paymentWebhookEvents';
       allow write: if false;
     }
 

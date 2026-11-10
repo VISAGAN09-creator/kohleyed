@@ -3,3 +3,6 @@
  * place so they can be restored without a schema or routing migration.
  */
 export const TOTD_ENABLED = false;
+
+/** Keep the customizer implementation available for a later launch. */
+export const CUSTOMIZER_ENABLED = false;

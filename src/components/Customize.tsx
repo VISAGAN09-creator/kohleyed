@@ -1,22 +1,11 @@
 import { ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 import { features } from '../data/siteData';
-import { MagneticAnchor } from './Magnetic';
 import { Reveal } from './Reveal';
 import { SmartImage } from './SmartImage';
 
-type CustomizeProps = {
-  onStartDesigning?: () => void;
-};
-
-export function Customize({ onStartDesigning }: CustomizeProps) {
-  const handleStart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (onStartDesigning) {
-      onStartDesigning();
-    } else {
-      window.location.hash = '#customize';
-    }
-  };
+export function Customize() {
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   return (
     <section
@@ -57,14 +46,17 @@ export function Customize({ onStartDesigning }: CustomizeProps) {
             })}
           </div>
 
-          <a
-            href="#customize"
-            onClick={handleStart}
+          <button
+            type="button"
+            onClick={() => setShowComingSoon(true)}
             className="liquid-metal metal-sheen mt-10 inline-flex min-h-14 items-center gap-4 bg-black px-8 py-4 text-sm font-semibold uppercase tracking-[0.05em] text-white transition-shadow duration-300 hover:shadow-metal sm:px-10 cursor-pointer"
           >
             Start Designing
             <ArrowRight size={20} strokeWidth={2} />
-          </a>
+          </button>
+          <p aria-live="polite" className="mt-3 text-sm text-metal-dark">
+            {showComingSoon ? 'Coming soon' : ''}
+          </p>
         </Reveal>
 
         <Reveal className="relative flex h-[430px] items-center justify-center sm:h-[540px] lg:h-[600px]">

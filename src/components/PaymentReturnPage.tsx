@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { formatPrice } from '../utils/format';
 import { paymentApiPath } from '../lib/paymentApi';
+import { mainWebsitePath } from '../utils/sitePaths';
 import { BrandLogo } from './BrandLogo';
 
 type PaymentReturnPageProps = {
@@ -96,7 +97,7 @@ export function PaymentReturnPage({ orderId, onBack }: PaymentReturnPageProps) {
   return (
     <section className="relative z-[1] min-h-screen bg-white font-sans text-sm leading-normal text-[#1a1a1a] flex flex-col justify-between">
       <header className="border-b border-[#e0e0e0] px-4 py-5 text-center flex justify-center">
-        <a href="/varataaa" className="flex items-center justify-center" aria-label="VARATAAA home">
+        <a href={mainWebsitePath} className="flex items-center justify-center" aria-label="Kohleyed home">
           <BrandLogo
             containerClassName="h-10 w-[140px] sm:h-11"
             imageClassName="h-full w-full object-contain"
@@ -198,9 +199,9 @@ export function PaymentReturnPage({ orderId, onBack }: PaymentReturnPageProps) {
             <h1 className="font-display text-3xl font-bold mb-3">Payment Received</h1>
             <p className="text-[#666666] mb-3">{state.message}</p>
             <p className="text-xs font-mono text-[#999999] mb-8 bg-[#f5f5f5] px-3 py-1.5 rounded-md">Order ID: {state.orderId}</p>
-            <a className="w-full h-14 bg-black text-white text-xs font-bold uppercase tracking-[0.16em] flex items-center justify-center" href={`mailto:varataaah@gmail.com?subject=${encodeURIComponent(`Order ${state.orderId} needs review`)}`}>
+            {import.meta.env.VITE_CONTACT_EMAIL && <a className="w-full h-14 bg-black text-white text-xs font-bold uppercase tracking-[0.16em] flex items-center justify-center" href={`mailto:${import.meta.env.VITE_CONTACT_EMAIL}?subject=${encodeURIComponent(`Order ${state.orderId} needs review`)}`}>
               Contact Support
-            </a>
+            </a>}
           </>
         )}
 
@@ -265,7 +266,7 @@ export function PaymentReturnPage({ orderId, onBack }: PaymentReturnPageProps) {
       </div>
 
       <footer className="border-t border-[#e0e0e0] py-6 text-center text-xs text-[#999999]">
-        &copy; {new Date().getFullYear()} VARATAAA. All rights reserved.
+        &copy; {new Date().getFullYear()} Kohleyed. All rights reserved.
       </footer>
     </section>
   );

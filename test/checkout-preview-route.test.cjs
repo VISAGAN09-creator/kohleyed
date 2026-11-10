@@ -27,7 +27,7 @@ test('Firebase deploy copies and verifies the Functions package', () => {
     'npm --prefix functions run verify-package',
   ]);
   assert.deepEqual(config.hosting.rewrites.slice(0, 2).map(({ source, function: name }) => [source, name]), [
-    ['/varataaa/api/**', 'api'],
     ['/api/**', 'api'],
+    ['/kohleyed/api/**', 'api'],
   ]);
 });

@@ -13,8 +13,12 @@ export type WebsiteAssetLoadResult = {
 };
 
 const websiteAssetKeys: WebsiteAssetKey[] = ['logo', 'sale', 'heroVideo', 'heroPoster'];
+const kohleyedAssetPaths: Partial<Record<WebsiteAssetKey, string>> = {
+  logo: 'website/kohleyed.png',
+  sale: 'website/sale.png',
+};
 const websiteAssetsDocument = doc(db, 'assets', 'website');
-const websiteLogoSessionKey = 'metalflux.website-assets.logo-url';
+const websiteLogoSessionKey = 'kohleyed.website-assets.logo-url.v2';
 
 let websiteAssetsPromise: Promise<WebsiteAssetLoadResult> | null = null;
 
@@ -80,19 +84,14 @@ function storagePathFrom(value: unknown): string | null {
 
 async function getWebsiteAssets(): Promise<WebsiteAssetLoadResult> {
   try {
-    const snapshot = await getDoc(websiteAssetsDocument);
-    if (!snapshot.exists()) {
-      return {
-        assets: {},
-        error: 'Website asset configuration is unavailable.',
-        missing: [...websiteAssetKeys],
-      };
-    }
-
-    const data = snapshot.data();
+    // Keep Firestore's existing field structure for optional hero assets. The
+    // two supplied brand assets have fixed Kohleyed Storage paths, so a stale
+    // copied document cannot point the storefront at the original logo.
+    const snapshot = await getDoc(websiteAssetsDocument).catch(() => null);
+    const data = snapshot?.exists() ? snapshot.data() : {};
     const resolvedAssets = await Promise.all(
       websiteAssetKeys.map(async (key) => {
-        const storagePath = storagePathFrom(data[key]);
+        const storagePath = kohleyedAssetPaths[key] ?? storagePathFrom(data[key]);
         if (!storagePath) return { key, url: null };
 
         try {

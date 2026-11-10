@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "ecommerce-f1448"
-  }
+    "default": "kohleyed-a8060",
+    "kohleyed-store": "kohleyed-a8060"
+  },
+  "targets": {},
+  "etags": {}
 }

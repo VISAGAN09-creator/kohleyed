@@ -109,7 +109,7 @@ export function Hero({
         {showPoster && (
           <img
             src={assets.heroPoster}
-            alt="VARATAAA editorial campaign"
+            alt="Kohleyed editorial campaign"
             className="absolute inset-0 h-full w-full object-cover"
             loading="eager"
             onError={() => setPosterFailed(true)}

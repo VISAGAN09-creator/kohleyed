@@ -14,7 +14,7 @@ import type { CartLine, Product } from '../types';
 //
 // ============================================================================
 
-const STORAGE_KEY = 'cart';
+const STORAGE_KEY = 'kohleyed.cart';
 
 /** Safely read and parse cart data from localStorage. */
 function loadCart(): CartLine[] {

@@ -12,7 +12,10 @@ let db = null;
 try {
   const privateKey = process.env.FIREBASE_PRIVATE_KEY;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const projectId = process.env.FIREBASE_PROJECT_ID || process.env.VITE_FIREBASE_PROJECT_ID;
+  const projectId = process.env.FIREBASE_PROJECT_ID || process.env.GCLOUD_PROJECT;
+  if (projectId && projectId !== 'kohleyed-a8060') {
+    throw new Error('Firebase Admin project must target kohleyed-a8060.');
+  }
 
   if (privateKey && clientEmail && projectId) {
     console.log('[Firebase] Initializing Admin SDK using environment variables.');
@@ -41,6 +44,7 @@ try {
     console.warn('[Firebase Warning] Add these variables to your .env file. See .env for instructions.');
   }
 } catch (error) {
+  if (error?.message === 'Firebase Admin project must target kohleyed-a8060.') throw error;
   console.error('[Firebase Error] Failed to initialize Firebase Admin SDK:', error);
 }
 
@@ -230,16 +234,16 @@ app.use(cors({
 }));
 // Razorpay signs the exact webhook bytes. Parse this route as a Buffer before
 // the JSON middleware; the handler verifies the signature before decoding it.
-app.use(['/api/razorpay-webhook', '/varataaa/api/razorpay-webhook'], express.raw({ type: 'application/json', limit: '100kb' }));
+app.use(['/api/razorpay-webhook', '/kohleyed/api/razorpay-webhook'], express.raw({ type: 'application/json', limit: '100kb' }));
 app.use(express.json({ limit: '100kb' }));
 
-// The storefront is also served behind a /varataaa reverse-proxy mount. The
+// The storefront is also served behind a /kohleyed reverse-proxy mount. The
 // Firebase Hosting rewrite forwards that mounted path unchanged to this
 // function, while the application routes are defined under /api. Normalize
 // the prefix before rate limiting and route matching so both public URLs share
 // the same authentication and handlers.
 app.use((req, res, next) => {
-  req.url = req.url.replace(/^\/varataaa(?=\/|$)/, '');
+  req.url = req.url.replace(/^\/kohleyed(?=\/|$)/, '');
   next();
 });
 
@@ -1764,36 +1768,21 @@ function orderConfirmationMessage(orderId, order, logoUrl = null) {
   // Keep a real text wordmark visible below the optional image. Email clients
   // do not reliably render image alt text when remote images are blocked.
   const logo = typeof logoUrl === 'string' && /^https:\/\//i.test(logoUrl)
-    ? `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:0;"><img src="${escapeHtml(logoUrl)}" alt="VARATAAA" width="180" style="display:block;width:180px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;"></td></tr><tr><td align="center" style="padding:8px 0 0;font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#171717;">VARATAAA</td></tr></table>`
-    : '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:0;font-family:Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:2px;color:#171717;">VARATAAA</td></tr></table>';
+    ? `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:0;"><img src="${escapeHtml(logoUrl)}" alt="Kohleyed" width="180" style="display:block;width:180px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;"></td></tr><tr><td align="center" style="padding:8px 0 0;font-family:Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:#171717;">Kohleyed</td></tr></table>`
+    : '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;"><tr><td align="center" style="padding:0;font-family:Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:2px;color:#171717;">Kohleyed</td></tr></table>';
   return {
-    subject: `VARATAAA order confirmation — ${orderId}`,
-    text: `Hi ${order?.customer?.firstName || order?.customer?.name || 'Customer'},\n\nYour payment has been confirmed.\nOrder ID: ${orderId}\n\n${textItems}\n\nTotal paid: ${total}\nDispatch estimate: 7 Days to dispatch\n\nQuestions? handle2227@gmail.com or varataaah@gmail.com`,
-    html: `<div style="margin:0 auto;max-width:600px;padding:24px;font-family:Arial,sans-serif;color:#171717;"><div style="margin:0 0 18px;">${logo}</div><h2 style="margin:0 0 16px;font-size:20px;">Order confirmed</h2><p>Hi ${customerName},</p><p>Your payment has been confirmed. We are preparing your order.</p><p><strong>Order ID:</strong> ${escapeHtml(orderId)}</p><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin:20px 0;">${itemRows}</table><p style="font-size:18px;"><strong>Total paid:</strong> ${total}</p><p><strong>Dispatch estimate:</strong> 7 Days to dispatch</p><p style="margin-top:32px;color:#555;font-size:13px;">Need help? Contact <a href="mailto:handle2227@gmail.com" style="color:#171717;">handle2227@gmail.com</a> or <a href="mailto:varataaah@gmail.com" style="color:#171717;">varataaah@gmail.com</a></p></div>`,
+    subject: `Kohleyed order confirmation — ${orderId}`,
+    text: `Hi ${order?.customer?.firstName || order?.customer?.name || 'Customer'},\n\nYour payment has been confirmed.\nOrder ID: ${orderId}\n\n${textItems}\n\nTotal paid: ${total}\nDispatch estimate: 7 Days to dispatch\n\n${process.env.SUPPORT_EMAIL ? `Questions? ${process.env.SUPPORT_EMAIL}` : ''}`,
+    html: `<div style="margin:0 auto;max-width:600px;padding:24px;font-family:Arial,sans-serif;color:#171717;"><div style="margin:0 0 18px;">${logo}</div><h2 style="margin:0 0 16px;font-size:20px;">Order confirmed</h2><p>Hi ${customerName},</p><p>Your payment has been confirmed. We are preparing your order.</p><p><strong>Order ID:</strong> ${escapeHtml(orderId)}</p><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin:20px 0;">${itemRows}</table><p style="font-size:18px;"><strong>Total paid:</strong> ${total}</p><p><strong>Dispatch estimate:</strong> 7 Days to dispatch</p>${process.env.SUPPORT_EMAIL ? `<p style="margin-top:32px;color:#555;font-size:13px;">Need help? Contact ${escapeHtml(process.env.SUPPORT_EMAIL)}</p>` : ''}</div>`,
   };
 }
 
-function websiteLogoStoragePath(value) {
-  const candidate = typeof value === 'string'
-    ? value
-    : value && typeof value === 'object' && typeof value.storagePath === 'string'
-      ? value.storagePath
-      : '';
-  const path = candidate.trim().replace(/^\/+/, '');
-  return path || null;
-}
-
-/** Resolves the same assets/website logo used by the storefront into an HTTPS email URL. */
-async function resolveWebsiteLogoUrl(database = db) {
-  if (!database) return null;
+/** Resolves Kohleyed's Storage logo into an HTTPS email URL. */
+async function resolveWebsiteLogoUrl() {
   try {
-    const snapshot = await database.collection('assets').doc('website').get();
-    if (!snapshot.exists) return null;
-    const storagePath = websiteLogoStoragePath(snapshot.data()?.logo);
-    if (!storagePath) return null;
-
     const bucket = admin.storage().bucket();
     if (!bucket.name) return null;
+    const storagePath = 'website/kohleyed.png';
     const file = bucket.file(storagePath);
     const [metadata] = await file.getMetadata();
     const token = metadata?.metadata?.firebaseStorageDownloadTokens?.split(',')[0]?.trim();
@@ -1846,7 +1835,7 @@ async function sendOrderConfirmationEmail(orderId, _order, dependencies = {}) {
     transporter = transporter || gmailTransporter;
     const logoUrl = await resolveWebsiteLogoUrl(database);
     const message = orderConfirmationMessage(orderId, claim.order, logoUrl);
-    const result = await transporter.sendMail({ from: process.env.GMAIL_USER || 'VARATAAA', to: claim.recipient, ...message });
+    const result = await transporter.sendMail({ from: process.env.GMAIL_USER || 'Kohleyed', to: claim.recipient, ...message });
     await orderRef.update({ [ORDER_EMAIL_STATUS_FIELD]: { status: 'sent', attemptId, sentAt: new Date().toISOString(), messageId: result.messageId || null } });
     return { status: 'sent' };
   } catch (error) {

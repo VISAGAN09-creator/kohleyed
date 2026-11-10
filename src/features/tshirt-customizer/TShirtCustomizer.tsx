@@ -262,7 +262,7 @@ export function TShirtCustomizer({ onBack }: TShirtCustomizerProps) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `varataaa-custom-mockup-${state.style}-${state.color}.jpg`;
+      link.download = `kohleyed-custom-mockup-${state.style}-${state.color}.jpg`;
       link.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       setShowExportSuccess(true);

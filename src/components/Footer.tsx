@@ -4,6 +4,8 @@ import { footerColumns } from '../data/siteData';
 import { BrandLogo } from './BrandLogo';
 import { MagneticButton } from './Magnetic';
 import { scrollToHash } from '../utils/scroll';
+import { policyPagePath } from '../utils/sitePaths';
+import { CUSTOMIZER_ENABLED } from '../config/features';
 
 type FooterProps = {
   activePage?: string;
@@ -12,6 +14,9 @@ type FooterProps = {
 };
 
 export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps) {
+  const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
+  const contactPhone = import.meta.env.VITE_CONTACT_PHONE;
+  const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL;
   const [toast, setToast] = useState<string | null>(null);
 
   const showToast = (message: string) => {
@@ -33,6 +38,7 @@ export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps)
     }
 
     if (link === 'Custom Prints') {
+      if (!CUSTOMIZER_ENABLED) return;
       if (onNavigate) {
         onNavigate('#customize');
       } else {
@@ -76,8 +82,8 @@ export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps)
                     imageClassName="h-full w-full object-contain"
                     fallbackClassName="flex h-full w-full items-center font-display text-xl font-bold tracking-wider text-black"
                   />
-                  <a
-                    href="https://www.instagram.com/varataaah/"
+                  {instagramUrl && <a
+                    href={instagramUrl}
                     target="_blank"
                     rel="noreferrer"
                     aria-label="Instagram"
@@ -85,7 +91,7 @@ export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps)
                     className="flex h-10 w-10 items-center justify-center border border-metal-mid text-metal-dark transition hover:border-black hover:bg-black hover:text-white"
                   >
                     <Instagram size={18} strokeWidth={2} />
-                  </a>
+                  </a>}
                 </div>
               )}
             </div>
@@ -94,9 +100,8 @@ export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps)
               dopamine-inducing designs.
             </p>
             <div className="mt-5 space-y-2 text-sm text-metal-dark">
-              <p><span className="font-semibold text-metal-text">Contact:</span> <a href="tel:+91 7358012011" className="transition hover:text-black">+91 7358012011</a></p>
-              <p><span className="font-semibold text-metal-text">Email:</span> <a href="mailto:varataaah@gmail.com" className="transition hover:text-black">varataaah@gmail.com</a></p>
-              <p><span className="font-semibold text-metal-text"></span> <a href="mailto:handle2227@gmail.com" className="transition hover:text-black">handle2227@gmail.com</a></p>
+              {contactPhone && <p><span className="font-semibold text-metal-text">Contact:</span> <a href={`tel:${contactPhone}`} className="transition hover:text-black">{contactPhone}</a></p>}
+              {contactEmail && <p><span className="font-semibold text-metal-text">Email:</span> <a href={`mailto:${contactEmail}`} className="transition hover:text-black">{contactEmail}</a></p>}
             </div>
           </div>
 
@@ -119,11 +124,11 @@ export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps)
                 {column.title}
               </h3>
               <ul className="space-y-3">
-                {column.links.map((link) => (
+                {column.links.filter((link) => CUSTOMIZER_ENABLED || link !== 'Custom Prints').map((link) => (
                   <li key={link}>
                     <a
                       href={column.title === 'Support'
-                        ? `/varataaa/${link === 'Terms & Service' ? 'terms-and-conditions' : link === 'Shipping' ? 'shipping-policy' : 'refund-policy'}`
+                        ? policyPagePath(link === 'Terms & Service' ? 'terms-and-conditions' : link === 'Shipping' ? 'shipping-policy' : 'refund-policy')
                         : '#'}
                       onClick={(event) => handleLinkClick(event, column.title, link)}
                      
@@ -139,13 +144,13 @@ export function Footer({ activePage, onNavigate, onSizeGuideOpen }: FooterProps)
         </div>
 
         <div className="flex flex-col gap-6 pt-8 sm:flex-row sm:items-center sm:justify-between sm:pt-10">
-          <p className="text-xs text-metal-text">© {new Date().getFullYear()} Varataaa. All rights reserved.</p>
+          <p className="text-xs text-metal-text">© {new Date().getFullYear()} Kohleyed. All rights reserved.</p>
         </div>
       </div>
       {activePage !== 'totd' && (
         <div className="relative -mx-5 sm:-mx-8 lg:-mx-12 overflow-hidden select-none pointer-events-none mt-4 sm:mt-6 lg:mt-8 -mb-16 sm:-mb-20 lg:-mb-28">
           <h1 className="text-[11vw] font-display font-black text-center leading-none tracking-normal uppercase select-none bg-gradient-to-b from-[#ff2c2c]/[0.12] to-[#ff2c2c]/[0.01] bg-clip-text text-transparent transform -translate-x-[1vw]">
-            Varataaa
+            Kohleyed
           </h1>
         </div>
       )}

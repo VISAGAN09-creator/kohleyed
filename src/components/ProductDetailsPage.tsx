@@ -298,7 +298,7 @@ export function ProductDetailsPage({
         <>
           <p className="text-[13px] leading-8 text-metal-text">
             {product.description ??
-              'Crafted for people who wear their personality out loud. Bold graphics, premium comfort, and a fit made for everyday statement-making. From street-ready staples to one-of-a-kind custom prints, VARATAAA helps you stand out without trying too hard.'}
+              'Crafted for people who wear their personality out loud. Bold graphics, premium comfort, and a fit made for everyday statement-making. From street-ready staples to one-of-a-kind custom prints, Kohleyed helps you stand out without trying too hard.'}
           </p>
           <ul className="mt-4 list-disc space-y-1 pl-5 text-[13px] leading-7 text-metal-text">
             {(product.details?.length ? product.details : DEFAULT_DETAILS).map((detail) => (

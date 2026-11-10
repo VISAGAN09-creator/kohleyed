@@ -370,7 +370,7 @@ export const TShirt3DViewer: React.FC<TShirt3DViewerProps> = ({
                 {/* Brand label detail visible in inner collar */}
                 {!isBack && style !== 'polo' && (
                     <g transform="translate(250, 105)" opacity="0.35">
-                        <text fontFamily="monospace" fontSize="7" fill="#888" textAnchor="middle" letterSpacing="2">VARATAAA</text>
+                        <text fontFamily="monospace" fontSize="7" fill="#888" textAnchor="middle" letterSpacing="2">Kohleyed</text>
                         <text y="7" fontFamily="sans-serif" fontSize="5" fill="#555" textAnchor="middle" fontWeight="bold">PREMIUM TEE • {garmentSize}</text>
                     </g>
                 )}

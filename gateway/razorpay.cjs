@@ -56,7 +56,7 @@ async function createOrder({ amount, currency = 'INR', receipt, items }) {
     body: JSON.stringify({
       amount: amountInPaise,
       currency,
-      receipt: String(receipt || `varataaa_${Date.now()}`).slice(0, 40),
+      receipt: String(receipt || `kohleyed_${Date.now()}`).slice(0, 40),
       notes: { item_count: String(Array.isArray(items) ? items.length : 0) },
     }),
   });
