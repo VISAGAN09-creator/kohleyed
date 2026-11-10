@@ -16,6 +16,7 @@ const websiteAssetKeys: WebsiteAssetKey[] = ['logo', 'sale', 'heroVideo', 'heroP
 const kohleyedAssetPaths: Partial<Record<WebsiteAssetKey, string>> = {
   logo: 'website/kohleyed.png',
   sale: 'website/sale.png',
+  heroVideo: 'website/herovideo.mp4',
 };
 const websiteAssetsDocument = doc(db, 'assets', 'website');
 const websiteLogoSessionKey = 'kohleyed.website-assets.logo-url.v2';
@@ -84,9 +85,8 @@ function storagePathFrom(value: unknown): string | null {
 
 async function getWebsiteAssets(): Promise<WebsiteAssetLoadResult> {
   try {
-    // Keep Firestore's existing field structure for optional hero assets. The
-    // two supplied brand assets have fixed Kohleyed Storage paths, so a stale
-    // copied document cannot point the storefront at the original logo.
+    // Keep Firestore's existing field structure for optional assets. Known
+    // Kohleyed assets use fixed Storage paths, avoiding stale copied values.
     const snapshot = await getDoc(websiteAssetsDocument).catch(() => null);
     const data = snapshot?.exists() ? snapshot.data() : {};
     const resolvedAssets = await Promise.all(
