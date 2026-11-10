@@ -1,4 +1,4 @@
-# Order-confirmation email recovery
+﻿# Order-confirmation email recovery
 
 This runbook applies to a paid order whose `orders/{orderId}` document has an
 `emailDelivery.status` of `failed` or `sending`. It is an operational procedure,
@@ -72,7 +72,7 @@ quarantined, bounced, or placed in spam.
 Using the authorized Gmail account (without exposing its credentials):
 
 1. Search the account's **Sent** mail around the attempt time for the persisted
-   recipient, the order ID, and the subject `VARATAAA order confirmation`.
+   recipient, the order ID, and the subject `Kohleyed order confirmation`.
 2. If available, use the organization's Gmail audit or message-trace tools to
    check SMTP acceptance, rejection, bounce, or quarantine events.
 3. Compare the Gmail timestamps with `emailDelivery.updatedAt` and the Cloud
@@ -130,4 +130,5 @@ The current code intentionally has no automatic recovery for `sending` or
 requires external Gmail evidence and an authorized, auditable operational
 decision. Do not treat a Gmail SMTP acceptance response as proof that the
 customer received the message.
+
 

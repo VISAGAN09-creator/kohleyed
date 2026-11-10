@@ -1,10 +1,10 @@
-# Admin Panel Specification (Proposed)
+﻿# Admin Panel Specification (Proposed)
 
 This document proposes an admin panel that fits the **existing** storefront and payment system. It separates:
 
-1. **Verified facts** — confirmed from current source/config  
-2. **Recommendations** — suggested design based on those facts  
-3. **Decisions requiring your approval** — choices that should not be assumed
+1. **Verified facts** â€” confirmed from current source/config  
+2. **Recommendations** â€” suggested design based on those facts  
+3. **Decisions requiring your approval** â€” choices that should not be assumed
 
 It does **not** invent live Firestore schemas beyond what write/read paths already imply, and it does not claim security guarantees that are not implemented.
 
@@ -25,8 +25,8 @@ Related reading: [architecture.md](architecture.md), [AGENTS.md](../AGENTS.md), 
 - Public API routes include `/api/health`, `/api/create-order`, `/api/verify-payment`, `/api/razorpay-webhook`, and `/api/subscribe`; administrator routes use Firebase token and custom-claim verification.
 - Firebase Auth and Firebase Storage are **not used** in application code.
 - Stock fields are mapped for display; server **does not** check or decrement stock at checkout.
-- Order line items store `id`, `name`, `price`, `quantity`, `image` — **not** size/color/custom design.
-- Customizer cart lines use ids `custom-…` that **cannot** be resolved by `resolveProductFromFirestore` → cannot complete normal checkout.
+- Order line items store `id`, `name`, `price`, `quantity`, `image` â€” **not** size/color/custom design.
+- Customizer cart lines use ids `custom-â€¦` that **cannot** be resolved by `resolveProductFromFirestore` â†’ cannot complete normal checkout.
 - `firestore-upload/upload.js` is a one-off Admin stock merge utility (hardcoded collection); not part of the runtime app.
 - CI deploys **Hosting only**; functions/rules are outside those workflows.
 - Branch name `feature/admin-auth` does not currently contain an admin auth implementation in app source.
@@ -36,7 +36,7 @@ Related reading: [architecture.md](architecture.md), [AGENTS.md](../AGENTS.md), 
 | Fact | Evidence |
 |---|---|
 | `orders` / `mail` client access denied | `firestore.rules` |
-| Wildcard public **read** for other top-level collections | Same file — includes `pendingOrders`, `newsletter` |
+| Wildcard public **read** for other top-level collections | Same file â€” includes `pendingOrders`, `newsletter` |
 | Rules file not referenced in `firebase.json` | Deploy of rules is not automated from this repo |
 | No server-side admin role checks | `server.cjs` has no auth middleware |
 | PII in `pendingOrders` / `newsletter` if rules are live as written | Server write shapes |
@@ -45,19 +45,19 @@ Related reading: [architecture.md](architecture.md), [AGENTS.md](../AGENTS.md), 
 
 **Product identity:** `` `${slugify(collectionName)}-${documentId}` `` must stay consistent on client and server.
 
-**Checkout-critical product fields:** numeric `price` (> 0); size stock via `sizes` / `sizeStock` / `stockBySize` / `stock` or top-level `XXS`…`XXXL` fields.
+**Checkout-critical product fields:** numeric `price` (> 0); size stock via `sizes` / `sizeStock` / `stockBySize` / `stock` or top-level `XXS`â€¦`XXXL` fields.
 
 **Config document:** `_config/collections` must list additional product collections or they will not be discovered (base `products` always included).
 
 **Order statuses observed:** pending (`pendingOrders.status`), paid (`orders.status`). No shipped/refunded/cancelled lifecycle in code.
 
-**Tax/shipping:** 18% tax, free shipping — duplicated in client checkout UI and server.
+**Tax/shipping:** 18% tax, free shipping â€” duplicated in client checkout UI and server.
 
 ---
 
 ## B. Recommendations (not yet approved)
 
-These are suggested directions that align with the verified architecture. They are **not** implementation tasks until you approve the decisions in §C.
+These are suggested directions that align with the verified architecture. They are **not** implementation tasks until you approve the decisions in Â§C.
 
 ### B.1 Placement and stack
 
@@ -113,7 +113,7 @@ Rate-limit and audit-log admin routes separately from public payment limiters.
 2. Decide Auth provider and who receives `admin` claims (manual claim set vs allowlist).  
 3. Decide whether admin is same Hosting site or separate project/site.  
 4. Keep Razorpay Checkout and backend credentials in the same Dashboard mode; bind backend credentials through Functions Secret Manager.
-5. Document the external `/varataaa` proxy contract for admin API paths if sharing the storefront origin.
+5. Document the external `/kohleyed` proxy contract for admin API paths if sharing the storefront origin.
 
 ### B.7 Testing / ops recommendations
 
@@ -140,16 +140,16 @@ Do not implement until you explicitly choose:
 | D9 | Order lifecycle | Only `paid` vs add `processing` / `shipped` / `cancelled` / `refunded` |
 | D10 | Refunds | Out of scope vs Razorpay refund API integration |
 | D11 | Email | Depend on Trigger Email extension vs other provider; webhook path should also mail? |
-| D12 | Branding in admin | Use the established VARATAAA customer-facing name |
+| D12 | Branding in admin | Use the established Kohleyed customer-facing name |
 | D13 | Who can access production admin | Named UIDs / emails list |
 | D14 | Rules deploy ownership | Add to `firebase.json` + CI vs manual Console paste |
-| D15 | Admin base URL | Under `/varataaa/admin` vs root `/admin` vs separate subdomain |
+| D15 | Admin base URL | Under `/kohleyed/admin` vs root `/admin` vs separate subdomain |
 
 ---
 
-## D. Proposed v1 scope (pending D1–D5)
+## D. Proposed v1 scope (pending D1â€“D5)
 
-**In (recommended default if you accept D5 = “orders + catalog”):**
+**In (recommended default if you accept D5 = â€œorders + catalogâ€):**
 
 - Admin login (Firebase Auth) + claim check  
 - Orders list/detail (server-mediated)  
@@ -174,8 +174,8 @@ Do not implement until you explicitly choose:
 | Critical | No auth on API today | Any new privileged route must not ship without authz |
 | High | Rules not in `firebase.json` | Admin rules changes may never reach production |
 | High | Missing size/color on orders | Fulfillment admin cannot trust line items |
-| High | No stock enforcement | Inventory admin edits won’t stop oversell |
-| Medium | Customizer checkout broken | “Custom orders” admin module premature without commerce fix |
+| High | No stock enforcement | Inventory admin edits wonâ€™t stop oversell |
+| Medium | Customizer checkout broken | â€œCustom ordersâ€ admin module premature without commerce fix |
 | Medium | Base-path / proxy mismatch | Admin API calls can 404 in local/prod if path logic wrong |
 | Medium | Webhook without signature verification | Ops tooling around payments should not worsen trust model |
 | Medium | Local secrets / debug logs in working tree | Rotate if exposed; never commit; never paste into admin docs |
@@ -185,14 +185,14 @@ Do not implement until you explicitly choose:
 
 ## F. Acceptance criteria (for a future approved v1)
 
-Only meaningful after §C decisions:
+Only meaningful after Â§C decisions:
 
 1. Unauthenticated users cannot read orders or mutate catalog via any new surface.  
 2. Non-admin authenticated users are denied admin APIs and admin UI routes.  
 3. Creating/updating a product with non-numeric `price` is rejected before write.  
 4. Adding a collection name to `_config/collections` makes products appear in the storefront without redeploy (existing discovery behavior).  
 5. `pendingOrders` and `newsletter` are not publicly readable under deployed rules.  
-6. Storefront checkout regression: create-order → Razorpay Checkout → verify still works for normal catalog products.
+6. Storefront checkout regression: create-order â†’ Razorpay Checkout â†’ verify still works for normal catalog products.
 7. No secrets in client bundle or Git history.
 
 ---
@@ -207,4 +207,5 @@ Only meaningful after §C decisions:
 
 ---
 
-*End of proposed admin-panel specification. Update §C answers here when decisions are made so agents do not re-litigate them.*
+*End of proposed admin-panel specification. Update Â§C answers here when decisions are made so agents do not re-litigate them.*
+

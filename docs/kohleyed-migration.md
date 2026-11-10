@@ -1,4 +1,4 @@
-# Kohleyed migration and deployment
+﻿# Kohleyed migration and deployment
 
 Kohleyed uses Firebase project `kohleyed-a8060`. Vite/React reads the catalog and website assets from Kohleyed Firestore and Storage. Express handles payments and admin operations; Firebase Functions exports it as `api`. Admin access uses Firebase Authentication and a server-verified `admin` custom claim. Customer carts are stored under `kohleyed.cart` on the current origin.
 
@@ -20,4 +20,5 @@ Set the five Functions secrets declared in `functions/index.js` in the Kohleyed 
 
 The existing Razorpay integration may share an account, with credentials in the same Dashboard mode. Kohleyed creates and verifies orders through its own API and stores records in Kohleyed Firestore. Register a separate Kohleyed webhook endpoint at the actual Kohleyed Hosting domain plus `/api/razorpay-webhook`, using its configured `RAZORPAY_WEBHOOK_SECRET`. Leave the original store's webhook unchanged. A real test payment is required after deployment to verify end-to-end operation.
 
-The parent Handle Vercel project is not in this repository. After obtaining the actual Kohleyed Hosting domain, add `/kohleyed` and `/kohleyed/*` rewrites that preserve the `/kohleyed` asset and API paths. Keep `/varataaa` untouched. Confirm brand assets, contact values, and legal copy before publication. No deployment has been performed by this migration.
+The parent Handle Vercel project is not in this repository. After obtaining the actual Kohleyed Hosting domain, add `/kohleyed` and `/kohleyed/*` rewrites that preserve the `/kohleyed` asset and API paths. Keep `/kohleyed` untouched. Confirm brand assets, contact values, and legal copy before publication. No deployment has been performed by this migration.
+

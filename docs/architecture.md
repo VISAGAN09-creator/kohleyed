@@ -1,10 +1,10 @@
-# Architecture Overview (Verified)
+﻿# Architecture Overview (Verified)
 
 > Kohleyed migration note: this document contains historical source-store details. Current setup and deployment are in [kohleyed-migration.md](kohleyed-migration.md). Active Firebase project: `kohleyed-a8060`.
 
 Evidence basis: source and Git-tracked config inspected on branch `feature/admin-auth` (HEAD `ea29abf`, 2026-10-20). Items not confirmed from this repository are marked **UNVERIFIED**.
 
-No secret values are documented here—only variable **names**.
+No secret values are documented hereâ€”only variable **names**.
 
 ---
 
@@ -15,39 +15,39 @@ This repository is a single-package e-commerce **storefront SPA** plus an Expres
 | Layer | Stack (verified) |
 |---|---|
 | UI | React 18.3, TypeScript 5.7 (`strict`), Vite 5.4, Tailwind 3.4, Framer Motion 11, lucide-react |
-| Routing | Custom hash router (`src/hooks/useRouter.ts`) — **not** React Router |
-| Client data | Firebase JS SDK → Firestore `onSnapshot` / `getDoc` |
+| Routing | Custom hash router (`src/hooks/useRouter.ts`) â€” **not** React Router |
+| Client data | Firebase JS SDK â†’ Firestore `onSnapshot` / `getDoc` |
 | Cart | React state + `localStorage` key `cart` |
 | API | Express 5 in `server.cjs` (helmet, cors, express-rate-limit) |
 | Payments | Razorpay REST + Razorpay Checkout; adapter in `gateway/razorpay.cjs` |
-| Hosting | Firebase Hosting (`dist`), rewrite `/api/**` → function `api` |
+| Hosting | Firebase Hosting (`dist`), rewrite `/api/**` â†’ function `api` |
 | Functions | `firebase-functions` v1 style `functions.https.onRequest` in `functions/index.js`, Node 20 |
 
 **Absent from application code (confirmed by search):** Firebase Auth imports, Firebase Storage usage, React Context/Redux/Zustand store, test runner, ESLint/Prettier, admin UI.
 
-Customer-facing branding uses **VARATAAA**. Existing `metalflux-*` package and cache identifiers are retained as compatibility/internal identifiers; **Thoughts Of The Day (TOTD)** remains a product section name.
+Customer-facing branding uses **Kohleyed**. Existing `metalflux-*` package and cache identifiers are retained as compatibility/internal identifiers; **Thoughts Of The Day (TOTD)** remains a product section name.
 
 ---
 
 ## 2. Topology
 
 ```text
-Browser (Vite SPA, base '/varataaa/')
-  │
-  ├── firebase Web SDK ──► Firestore (catalog / TOTD / _config reads)
-  │
-  ├── fetch paymentApiPath('/create-order'|'/verify-payment'|…)
-  │         │
-  │         ▼
-  │   Hosting rewrite /api/** ──► Cloud Function `api`
-  │                                  └── Express app (server.cjs)
-  │                                        ├── Admin SDK → Firestore writes
-  │                                        └── gateway → Razorpay REST
-  │
-  └── Razorpay Checkout ──► signed callback ──► #payment-return?order_id=…
+Browser (Vite SPA, base '/kohleyed/')
+  â”‚
+  â”œâ”€â”€ firebase Web SDK â”€â”€â–º Firestore (catalog / TOTD / _config reads)
+  â”‚
+  â”œâ”€â”€ fetch paymentApiPath('/create-order'|'/verify-payment'|â€¦)
+  â”‚         â”‚
+  â”‚         â–¼
+  â”‚   Hosting rewrite /api/** â”€â”€â–º Cloud Function `api`
+  â”‚                                  â””â”€â”€ Express app (server.cjs)
+  â”‚                                        â”œâ”€â”€ Admin SDK â†’ Firestore writes
+  â”‚                                        â””â”€â”€ gateway â†’ Razorpay REST
+  â”‚
+  â””â”€â”€ Razorpay Checkout â”€â”€â–º signed callback â”€â”€â–º #payment-return?order_id=â€¦
 ```
 
-Production comments and `paymentApi.ts` describe a custom-domain mount at `/varataaa` (referred to as a Vercel proxy for `thehandle.in`). That proxy configuration is **not in this repository** → behavior **UNVERIFIED**.
+Production comments and `paymentApi.ts` describe a custom-domain mount at `/kohleyed` (referred to as a Vercel proxy for `thehandle.in`). That proxy configuration is **not in this repository** â†’ behavior **UNVERIFIED**.
 
 ---
 
@@ -58,7 +58,7 @@ Production comments and `paymentApi.ts` describe a custom-domain mount at `/vara
 | Path | Role |
 |---|---|
 | `main.tsx` | React root |
-| `App.tsx` | Composition shell: `useCart` + `useCatalog` + `useRouter` → pages |
+| `App.tsx` | Composition shell: `useCart` + `useCatalog` + `useRouter` â†’ pages |
 | `types.ts` | Shared `Product`, `CartLine`, `DataStatus`, etc. |
 | `hooks/useRouter.ts` | Hash routes and navigation |
 | `hooks/useCart.ts` | Cart mutations + localStorage |
@@ -66,7 +66,7 @@ Production comments and `paymentApi.ts` describe a custom-domain mount at `/vara
 | `data/firestoreContent.ts` | Collection discovery, `toProduct`, live listeners |
 | `data/siteData.ts` | Static nav/footer/features; static products are **not** the live catalog source |
 | `lib/firebase.ts` | App + Firestore + Analytics init |
-| `lib/paymentApi.ts` | Chooses `/api` vs `/varataaa/api` from pathname |
+| `lib/paymentApi.ts` | Chooses `/api` vs `/kohleyed/api` from pathname |
 | `lib/paymentGateway.ts` | Load Razorpay Checkout and open the provider UI |
 | `components/*` | Storefront UI (home sections, drawers, product pages, checkout, payment return) |
 | `features/tshirt-customizer/*` | Custom tee mockup studio |
@@ -83,8 +83,8 @@ Production comments and `paymentApi.ts` describe a custom-domain mount at `/vara
 | `functions/index.js` | `exports.api = functions.https.onRequest(app)` |
 | `functions/copy-server.js` | Copies `server.cjs`, `gateway/`, filtered `.env` into `functions/` |
 | `firebase.json` | Hosting + functions; **no** `firestore` block; **no** predeploy |
-| `firestore.rules` | Client rules file (deploy wiring missing — see §7) |
-| `.firebaserc` | Default project `ecommerce-f1448` |
+| `firestore.rules` | Client rules file (deploy wiring missing â€” see Â§7) |
+| `.firebaserc` | Default project `kohleyed-a8060` |
 | `.github/workflows/firebase-hosting-*.yml` | Hosting build/deploy only |
 | `firestore-upload/` | Standalone Admin script (not runtime); hardcodes a collection name |
 | `walkthrough.md` | `_config/collections` admin setup notes |
@@ -102,7 +102,7 @@ Production comments and `paymentApi.ts` describe a custom-domain mount at `/vara
 - `sessionStorage['razorpay_checkout_context']` and `razorpay_payment_response` (checkout display and signed callback data)
 - URL hash for navigation
 
-**Doc inconsistency:** `App.tsx` comments claim `useCart` has “cookie persistence, Firestore sync”. Implementation uses **localStorage only** and does not sync the cart to Firestore.
+**Doc inconsistency:** `App.tsx` comments claim `useCart` has â€œcookie persistence, Firestore syncâ€. Implementation uses **localStorage only** and does not sync the cart to Firestore.
 
 ### 4.2 Routing (hash)
 
@@ -114,7 +114,7 @@ Production comments and `paymentApi.ts` describe a custom-domain mount at `/vara
 | `#totd` | `totd` | `TOTD` |
 | `#customize` | `customize` | `TShirtCustomizer` |
 | `#checkout` | `checkout` | `CheckoutPage` (navbar/footer hidden) |
-| `#payment-return?order_id=…` | `paymentReturn` | `PaymentReturnPage` |
+| `#payment-return?order_id=â€¦` | `paymentReturn` | `PaymentReturnPage` |
 
 `productReturnPage` is in-memory only (not encoded in the URL).
 
@@ -132,7 +132,7 @@ Product field mapping is intentionally alias-rich in `toProduct()` (see `firesto
 - `price` may display via `priceLabel` / string `price`, but checkout server requires `Number(price)` finite and > 0.
 - If no size data exists, `sizeFields()` still yields eight sizes at stock `0` (product appears out of stock).
 
-`VITE_FIRESTORE_LOOKBOOK_COLLECTION` is declared; lookbook mapping helpers exist, but the live Lookbook UI uses catalog products — lookbook subscription path is effectively unused for the main UI.
+`VITE_FIRESTORE_LOOKBOOK_COLLECTION` is declared; lookbook mapping helpers exist, but the live Lookbook UI uses catalog products â€” lookbook subscription path is effectively unused for the main UI.
 
 ### 4.4 Cart
 
@@ -142,7 +142,7 @@ Product field mapping is intentionally alias-rich in `toProduct()` (see `firesto
 
 ### 4.5 Customizer
 
-Browser-only designs (`URL.createObjectURL`); presets are inline SVG data URIs. Pricing UI uses base 599 INR + 150 acid wash. Export downloads SVG from the mockup DOM. The “3D” viewer is SVG/CSS, not WebGL/Three.js.
+Browser-only designs (`URL.createObjectURL`); presets are inline SVG data URIs. Pricing UI uses base 599 INR + 150 acid wash. Export downloads SVG from the mockup DOM. The â€œ3Dâ€ viewer is SVG/CSS, not WebGL/Three.js.
 
 ---
 
@@ -156,20 +156,20 @@ Browser-only designs (`URL.createObjectURL`); presets are inline SVG data URIs. 
 | `POST` | `/api/create-order` | Validate items, resolve products/prices and shipping server-side, create Razorpay order, write `pendingOrders` |
 | `POST` | `/api/verify-payment` | Verify Razorpay callback signature and captured status, finalize the paid order, deduct inventory, send confirmation email |
 | `POST` | `/api/razorpay-webhook` | Verify raw-body signature; handle `payment.captured` and `payment.failed` idempotently |
-| `POST` | `/api/subscribe` | Newsletter email → `newsletter` (no frontend caller found) |
+| `POST` | `/api/subscribe` | Newsletter email â†’ `newsletter` (no frontend caller found) |
 
 Middleware: `helmet()`, CORS allowlist (`CORS_ALLOWED_ORIGINS` + localhost Vite ports), JSON 100kb, general rate limit 100/15min/IP on `/api/`, stricter 10/15min on create/verify.
 
 **No authentication middleware** on any route.
 
-### 5.2 Create → pay → verify
+### 5.2 Create â†’ pay â†’ verify
 
 1. Client posts `{ items: [{id, quantity}], customer, shipping }` (no client amount).
 2. Server `resolveProductFromFirestore` (config collections + `products` + `TOTD`, strip trailing size).
 3. Charge the authoritative product subtotal; additional tax and shipping are currently 0.
 4. Razorpay order created; pending doc id = Razorpay order ID.
 5. Client opens Razorpay Checkout and receives the signed success callback.
-6. Client opens `#payment-return?order_id=…`; `PaymentReturnPage` posts the callback fields for verification.
+6. Client opens `#payment-return?order_id=â€¦`; `PaymentReturnPage` posts the callback fields for verification.
 7. Server validates the signature, re-queries Razorpay for `captured` status, matches the server-calculated amount, and uses the shared Firestore transaction to create `orders/{orderId}` and deduct inventory once.
 
 Webhook path: verifies the HMAC against the exact raw request bytes before parsing JSON. Persistent event claims suppress duplicate deliveries. `payment.captured` re-verifies the payment with Razorpay and calls the same finalization/email flow as the frontend verification path; `payment.failed` records the pending failure without creating a paid order.
@@ -181,7 +181,7 @@ Webhook path: verifies the HMAC against the exact raw request bytes before parsi
 | `_config` (`collections` doc) | Yes | No | No (manual) | Product collection list |
 | Configured product collections + `products` | Yes | No | No | Catalog |
 | `TOTD` | Yes | No | No | TOTD catalog |
-| `pendingOrders` | Allowed by rules file (see §7) | No | Yes | Checkout context |
+| `pendingOrders` | Allowed by rules file (see Â§7) | No | Yes | Checkout context |
 | `orders` | Denied | Denied | Yes | Paid orders |
 | `mail` | Denied | Denied | Yes | Email trigger docs (verify path) |
 | `newsletter` | Allowed by rules file | No | Yes | Subscribers |
@@ -205,7 +205,7 @@ Size/color/custom design metadata are **not** written on these documents.
 | Firebase Auth (client) | Not imported / not used |
 | Server auth (JWT, API keys for clients, session cookies) | Not implemented |
 | Admin role / custom claims | Not implemented |
-| Checkout “Sign in” | UI toast: “Sign in modal coming soon” |
+| Checkout â€œSign inâ€ | UI toast: â€œSign in modal coming soonâ€ |
 | Firestore client writes | Denied (`allow write: if false`) |
 | Privileged writes | Firebase Admin SDK in `server.cjs` only |
 
@@ -219,7 +219,7 @@ File: `firestore.rules`.
 
 Effective pattern:
 
-- Wildcard: read allowed if collection ≠ `orders` and ≠ `mail`; write always false.
+- Wildcard: read allowed if collection â‰  `orders` and â‰  `mail`; write always false.
 - Explicit blocks also deny all on `orders` and `mail`.
 - `_config` explicitly readable.
 
@@ -235,8 +235,8 @@ Effective pattern:
 
 ```bash
 npm install
-npm run build          # tsc -b && vite build → dist/
-npm run dev            # Vite; base /varataaa/
+npm run build          # tsc -b && vite build â†’ dist/
+npm run dev            # Vite; base /kohleyed/
 npm run server         # node server.cjs; PORT default 5000
 npm run dev:all
 cd functions && npm install && npm run copy-server
@@ -244,7 +244,7 @@ firebase deploy --only hosting    # after build
 firebase deploy --only functions  # after copy-server
 ```
 
-`functions/index.js` comments refer to a predeploy copy; **`firebase.json` does not define a predeploy hook** — copy is manual.
+`functions/index.js` comments refer to a predeploy copy; **`firebase.json` does not define a predeploy hook** â€” copy is manual.
 
 ### 8.2 Client / build env (`VITE_*`)
 
@@ -257,7 +257,7 @@ Embedded in the browser bundle:
 
 ### 8.3 Server / function env
 
-- `FIREBASE_PROJECT_ID` (or `VITE_FIREBASE_PROJECT_ID`), `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` — local Admin init
+- `FIREBASE_PROJECT_ID` (or `VITE_FIREBASE_PROJECT_ID`), `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` â€” local Admin init
 - Cloud Functions: Application Default Credentials when `FUNCTION_TARGET` or `K_SERVICE` set
 - `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`
 - `GMAIL_USER`, `GMAIL_APP_PASSWORD`
@@ -267,17 +267,17 @@ Embedded in the browser bundle:
 
 ### 8.4 GitHub Actions
 
-- Push `main` → build with seven `VITE_FIREBASE_*` secrets → Hosting live (`FIREBASE_SERVICE_ACCOUNT_ECOMMERCE_F1448`)
-- PR → preview channel deploy (same build secrets)
+- Push `main` â†’ build with seven `VITE_FIREBASE_*` secrets â†’ Hosting live (`FIREBASE_SERVICE_ACCOUNT_ECOMMERCE_F1448`)
+- PR â†’ preview channel deploy (same build secrets)
 
 Neither workflow deploys Cloud Functions or injects backend payment/Admin secrets.
 
 ### 8.5 Base-path / proxy coupling
 
-- Built assets referenced under `/varataaa/…`.
-- `paymentApiPath()` uses `/varataaa/api` when pathname is under `/varataaa`.
-- Hosting rewrite is `/api/**` only (not `/varataaa/api/**`).
-- Vite dev proxy is `/api` → `:5000` only.
+- Built assets referenced under `/kohleyed/â€¦`.
+- `paymentApiPath()` uses `/kohleyed/api` when pathname is under `/kohleyed`.
+- Hosting rewrite is `/api/**` only (not `/kohleyed/api/**`).
+- Vite dev proxy is `/api` â†’ `:5000` only.
 
 Implication: production payments likely depend on an external path strip; Firebase default hosting URL and local checkout paths may break without matching proxy/proxy rules. Runtime confirmation **UNVERIFIED**.
 
@@ -297,7 +297,7 @@ Implication: production payments likely depend on an external path strip; Fireba
 
 - Catalog: first-snapshot resilience (errors after a successful snapshot do not wipe UI).
 - Checkout/payment: try/catch + toast; API responses must be JSON.
-- Server: JSON `{ success, message, … }`; webhook always 200.
+- Server: JSON `{ success, message, â€¦ }`; webhook always 200.
 - No React error boundary found.
 
 ### 9.3 Testing
@@ -326,10 +326,10 @@ Firebase Auth / Storage: **not integrated** in app code (Storage packages may ex
 
 | Claim / location | Actual code |
 |---|---|
-| `App.tsx` comment: cart “cookie persistence, Firestore sync” | `useCart` uses localStorage only |
-| `functions/index.js`: “predeploy script copies…” | No `predeploy` in `firebase.json`; manual `copy-server` |
-| `firestore.rules` comments: “catalog collections” public read | Wildcard allows **all** non-`orders`/`mail` collections |
-| `metalflux-*` package/cache identifiers vs VARATAAA UI | Compatibility identifiers, not a customer-facing branding split |
+| `App.tsx` comment: cart â€œcookie persistence, Firestore syncâ€ | `useCart` uses localStorage only |
+| `functions/index.js`: â€œpredeploy script copiesâ€¦â€ | No `predeploy` in `firebase.json`; manual `copy-server` |
+| `firestore.rules` comments: â€œcatalog collectionsâ€ public read | Wildcard allows **all** non-`orders`/`mail` collections |
+| `metalflux-*` package/cache identifiers vs Kohleyed UI | Compatibility identifiers, not a customer-facing branding split |
 | `walkthrough.md` env cleanup | Matches current discovery via `_config/collections` |
 | Empty tracked stubs | `README.md`, `docs/data-model.md`, `docs/implementation-plan.md`, `.cursor/rules/*.mdc` were empty at audit time |
 | Branch `feature/admin-auth` | No Auth/admin implementation found in app source |
@@ -340,12 +340,13 @@ Firebase Auth / Storage: **not integrated** in app code (Storage packages may ex
 
 1. Deployed Firestore rules vs `firestore.rules`.
 2. Whether Firebase Trigger Email (or equivalent) consumes `mail`.
-3. External `/varataaa` reverse-proxy behavior.
+3. External `/kohleyed` reverse-proxy behavior.
 4. Whether live Cloud Function matches current `server.cjs`.
-5. Whether `https://ecommerce-f1448.web.app/` works with asset base `/varataaa/`.
-6. Local checkout under Vite `/varataaa/` + `/varataaa/api` proxy gap.
+5. Whether `https://kohleyed-a8060.web.app/` works with asset base `/kohleyed/`.
+6. Local checkout under Vite `/kohleyed/` + `/kohleyed/api` proxy gap.
 7. Razorpay Dashboard mode, event selection, and webhook secret alignment with the deployed function.
 8. Live inventory documents and collection names in the Firebase project.
 9. Admin tooling outside this repository.
 
 For agent operating rules and verification commands, see [AGENTS.md](../AGENTS.md). For a proposed admin surface grounded in this architecture, see [admin-panel-spec.md](admin-panel-spec.md).
+
