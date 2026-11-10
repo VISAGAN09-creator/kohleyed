@@ -1437,6 +1437,34 @@ app.get('/api/admin/product-collections', async (req, res) => {
   }
 });
 
+app.post('/api/admin/product-collections', async (req, res) => {
+  if (!db) return res.status(503).json({ success: false, message: 'Product collections are unavailable because the database is not configured.' });
+  const name = typeof req.body?.name === 'string' ? req.body.name.trim().replace(/\s+/g, ' ') : '';
+  if (!name || name.length > 100 || name.includes('/') || name === '.' || name === '..' || name.startsWith('_')) {
+    return res.status(400).json({ success: false, message: 'Enter a collection name of up to 100 characters without slashes.' });
+  }
+  try {
+    const reference = db.doc('_config/collections');
+    await db.runTransaction(async (transaction) => {
+      const snapshot = await transaction.get(reference);
+      const data = snapshot.exists ? snapshot.data() : {};
+      const configured = data.productCollections || data.collections || data.names;
+      const names = Array.isArray(configured) ? configured.filter((value) => typeof value === 'string' && value.trim()) : [];
+      if (['products', 'TOTD', ...names].some((existing) => existing.trim().replace(/\s+/g, ' ').toLocaleLowerCase() === name.toLocaleLowerCase())) {
+        const error = new Error('A collection with this name already exists.');
+        error.status = 409;
+        throw error;
+      }
+      transaction.set(reference, { productCollections: [...names, name] }, { merge: true });
+    });
+    return res.status(201).json({ success: true, name });
+  } catch (error) {
+    if (error.status === 409) return res.status(409).json({ success: false, message: error.message });
+    console.error('[Admin Products] Failed to create collection:', error.message);
+    return res.status(500).json({ success: false, message: 'Unable to create the collection. Please try again.' });
+  }
+});
+
 app.post('/api/admin/products', async (req, res) => {
   if (!db) return res.status(503).json({ success: false, message: 'Product creation is unavailable because the database is not configured.' });
 
@@ -1488,6 +1516,32 @@ app.post('/api/admin/products', async (req, res) => {
   } catch (error) {
     console.error('[Admin Products] Failed to create product:', error.message);
     return res.status(500).json({ success: false, message: 'Unable to save the product.' });
+  }
+});
+
+app.delete('/api/admin/products', async (req, res) => {
+  if (!db) return res.status(503).json({ success: false, message: 'Product deletion is unavailable because the database is not configured.' });
+  const collectionName = typeof req.body?.collectionName === 'string' ? req.body.collectionName : '';
+  const documentId = typeof req.body?.documentId === 'string' ? req.body.documentId : '';
+  if (!collectionName || !documentId || collectionName.includes('/') || documentId.includes('/')) {
+    return res.status(400).json({ success: false, message: 'Choose a valid product to delete.' });
+  }
+  try {
+    if (!(await inventoryCollectionNames()).includes(collectionName)) {
+      return res.status(400).json({ success: false, message: 'This product collection is unavailable.' });
+    }
+    const reference = db.collection(collectionName).doc(documentId);
+    const deleted = await db.runTransaction(async (transaction) => {
+      const snapshot = await transaction.get(reference);
+      if (!snapshot.exists) return false;
+      transaction.delete(reference);
+      return true;
+    });
+    if (!deleted) return res.status(404).json({ success: false, message: 'This product no longer exists. Refresh inventory.' });
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('[Admin Products] Failed to delete product:', error.message);
+    return res.status(500).json({ success: false, message: 'Unable to delete the product.' });
   }
 });
 

@@ -227,7 +227,7 @@ export function Hero({
           </div>
           
           <h1 className="mb-8 font-display text-5xl font-extrabold leading-[0.95] tracking-normal text-[#ff2b2b] sm:text-7xl lg:text-8xl xl:text-[7.5rem]">
-            COMING IN HOT🌶️
+          Wear Your Story
           </h1>
           <p className="mb-10 max-w-[600px] text-base font-light leading-7 text-metal-light sm:text-lg">
             Custom print t-shirts crafted for the bold & designs that redefine STREETWEAR.
